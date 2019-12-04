@@ -1,7 +1,7 @@
 import React from "react";
 import { Placeholder, Card } from "semantic-ui-react";
 
-class RenderPlaceholder extends React.Component {
+class CustomPlaceholder extends React.Component {
   render() {
     return (
       <Card>
@@ -28,4 +28,4 @@ class RenderPlaceholder extends React.Component {
   }
 }
 
-export default RenderPlaceholder;
+export default CustomPlaceholder;

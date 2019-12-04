@@ -1,12 +1,18 @@
 import React from "react";
 import _ from "lodash";
 import { NavLink, Link } from "react-router-dom";
-import { Card, Image, Header, Button } from "semantic-ui-react";
+import { Card, Image, Header, Button, Placeholder } from "semantic-ui-react";
+
+import CustomPlaceholder from "../CustomPlacholder";
 
 class Portfolio extends React.Component {
   renderMeds = meds => {
-    if (meds) {
-      let list = [];
+    let list = [];
+    if (this.props.showPlaceholder) {
+      for (let i = 0; i < 5; i++) {
+        list.push(<CustomPlaceholder key={i} />);
+      }
+    } else {
       _.forIn(meds, (val, key) => {
         list.push(
           <Card key={key}>
@@ -27,16 +33,26 @@ class Portfolio extends React.Component {
           </Card>
         );
       });
-      return list;
     }
+    return list;
   };
   render() {
     return (
       <section className="portfolio">
         <Header as="h1">
-          {this.props.type}
+          {this.props.showPlaceholder ? (
+            <Placeholder>
+              <Placeholder.Line length="long" />
+            </Placeholder>
+          ) : (
+            this.props.header
+          )}
           <Link to={`/medicines/${this.props.type}`}>
-            <Button floated="right">Browse All</Button>
+            {this.props.showPlaceholder ? (
+              null
+            ) : (
+              <Button floated="right">Browse All</Button>
+            )}
           </Link>
         </Header>
         <ul className="portfolio__items">

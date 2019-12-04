@@ -6,21 +6,25 @@ export const isLoading = isLoading => {
 };
 
 export const searchFor = term => async dispatch => {
-  const snap = await firebase
-    .database()
-    .ref()
-    .child("medicines")
-    .once("value");
-  let result = null;
-  _.forIn(snap.val(), val => {
-    _.forIn(val, (val, key) => {
-      if (key.toLowerCase() === term.toLowerCase()) {
-        result = {name: key, ...val};
-        return false;
-      }
+  if (term === "") {
+    dispatch({ type: "SEARCH_RESULT", payload: null });
+  } else {
+    const snap = await firebase
+      .database()
+      .ref()
+      .child("medicines")
+      .once("value");
+    let result = null;
+    _.forIn(snap.val(), val => {
+      _.forIn(val, (val, key) => {
+        if (key.toLowerCase() === term.toLowerCase()) {
+          result = { name: key, ...val };
+          return false;
+        }
+      });
     });
-  });
-  dispatch({ type: "SEARCH_RESULT", payload: result})
+    dispatch({ type: "SEARCH_RESULT", payload: result });
+  }
 };
 
 export const getSingleMed = (type, med) => async dispatch => {

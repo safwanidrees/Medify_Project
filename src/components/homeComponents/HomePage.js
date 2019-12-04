@@ -5,7 +5,6 @@ import _ from "lodash";
 import "../../style.css";
 import Portfolio from "./Portfolio";
 import { getTypeMeds } from "../../actions";
-import RenderPlaceholder from "../Placholder";
 
 class HomePage extends React.Component {
   componentDidMount() {
@@ -15,12 +14,12 @@ class HomePage extends React.Component {
   renderPortfolio = () => {
     let list = [];
     if (Object.keys(this.props.medicines).length < 1) {
-      for (let i = 0; i <= 5; i++) {
-        list.push(<RenderPlaceholder />);
+      for (let i = 0; i < 2; i++) {
+        list.push(<Portfolio showPlaceholder key={i} />);
       }
     }
     _.forIn(this.props.medicines, (val, key) => {
-      list.push(<Portfolio items={val} type={key} key={key} />);
+      list.push(<Portfolio items={val} type={key} key={key} header={key} />);
     });
     return list;
   };

@@ -2,7 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 
 import { getSingleMed } from "../../actions";
-import MedicineJSX from "./MedicineJSX"
+import MedicineJSX from "./MedicineJSX";
+import { Segment } from "semantic-ui-react";
 
 class MedicineItem extends React.Component {
   state = { name: "" };
@@ -20,7 +21,11 @@ class MedicineItem extends React.Component {
     this.props.getSingleMed(type, name);
   };
   renderMed() {
-    return <MedicineJSX medicine={this.props.medicine} display/>
+    return (
+      <Segment placeholder style={{ marginTop: "30px 0" }}>
+        <MedicineJSX medicine={this.props.medicine} />
+      </Segment>
+    );
   }
   render() {
     return this.renderMed();

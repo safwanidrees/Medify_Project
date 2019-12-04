@@ -5,6 +5,7 @@ import _ from "lodash";
 import { searchFor, getTypeMeds, isLoading } from "../actions";
 import MedicineJSX from "./MedicineComponents/MedicineJSX";
 import Portfolio from "./homeComponents/Portfolio";
+import { Segment, Loader } from "semantic-ui-react";
 
 class MedicineSearch extends React.Component {
   state = { term: "" };
@@ -20,30 +21,36 @@ class MedicineSearch extends React.Component {
       this.props.getTypeMeds(this.props.searchResult.type, 5);
     }
   }
+  componentWillUnmount() {
+    this.setState({ term: "" });
+    this.props.searchFor(this.state.term);
+  }
   fetchData = () => {
     const { term } = this.props.match.params;
     this.setState({ term });
     this.props.searchFor(term);
-    this.props.isLoading(false)
+    this.props.isLoading(false);
   };
   renderMed = () => {
-    const { searchResult } = this.props;
-    let display = true;
-    if (!searchResult) display = false;
-    return (
-      <MedicineJSX
-        medicine={searchResult}
-        display={display}
-        message="No results found"
-      />
-    );
+    const { searchResult, isDataLoading } = this.props;
+    if (isDataLoading) {
+      return <Loader active />;
+    }
+    return <MedicineJSX medicine={searchResult} message="No results found" />;
   };
   renderPortfolio = () => {
     if (this.props.searchResult) {
       let list = [];
       _.forIn(this.props.sameTypeMeds, (val, key) => {
         if (key === this.props.searchResult.type)
-          list.push(<Portfolio items={val} type={key} key={key} />);
+          list.push(
+            <Portfolio
+              items={val}
+              type={key}
+              key={key}
+              header={`More ${key} Medicines`}
+            />
+          );
       });
       return list;
     }
@@ -51,7 +58,9 @@ class MedicineSearch extends React.Component {
   render() {
     return (
       <React.Fragment>
-        {this.renderMed()}
+        <Segment placeholder style={{ marginTop: "30px" }}>
+          {this.renderMed()}
+        </Segment>
         {this.renderPortfolio()}
       </React.Fragment>
     );
@@ -61,7 +70,8 @@ class MedicineSearch extends React.Component {
 const mapStateToProps = state => {
   return {
     searchResult: state.searchResult,
-    sameTypeMeds: state.typeMedicines
+    sameTypeMeds: state.typeMedicines,
+    isDataLoading: state.isLoading
   };
 };
 

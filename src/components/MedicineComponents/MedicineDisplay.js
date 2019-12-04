@@ -22,16 +22,28 @@ class MedicineDisplay extends React.Component {
     this.props.getTypeMeds(type, 5);
   };
   renderPortfolio = meds => {
-    if (!this.props.sameTypeMeds) return <div></div>;
     let list = [];
+    if (!meds.hasOwnProperty(this.props.match.params.type)) {
+      for (let i = 0; i < 1; i++) {
+        list.push(<Portfolio showPlaceholder key={i} />);
+      }
+    }
     _.forIn(meds, (val, key) => {
-      if (key === this.props.match.params.type)
-        list.push(<Portfolio items={val} type={key} key={key} />);
+      if (key === this.props.match.params.type) {
+        list.push(
+          <Portfolio
+            items={val}
+            type={key}
+            key={key}
+            header={`More ${key} Medicines`}
+          />
+        );
+      }
     });
+
     return list;
   };
   render() {
-    // console.log(this.state);
     const { name, type } = this.props.match.params;
     return (
       <React.Fragment>
