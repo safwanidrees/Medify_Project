@@ -2,15 +2,16 @@ import React from "react";
 import { Field, reduxForm } from "redux-form";
 import { Link, NavLink } from "react-router-dom";
 import { Dropdown, Button, Icon, Input } from "semantic-ui-react";
-import { connect } from "react-redux" 
 
 import history from "../history";
-import { isLoading } from "../actions"
 
 class Navbar extends React.Component {
   onSubmit = ({ search }) => {
-    this.props.isLoading(true)
-    history.push(`/search/${search}`);
+    if (!search) {
+      alert("nothing to search for")
+    } else {
+      history.push(`/search/${search}`);
+    }
   };
   render() {
     const activeStyle = {
@@ -60,48 +61,48 @@ class Navbar extends React.Component {
             <div className="nav__links">
               <ul className="nav__link--items">
                 <NavLink
-                  to="/medicines/Cardio-Vascular-System"
+                  to="/medicines/Cardio-Vascular-System?page=1"
                   className="item"
                   activeStyle={activeStyle}
                 >
                   Cardio Vascular System
                 </NavLink>
                 <NavLink
-                  to="/medicines/Derma"
+                  to="/medicines/Derma?page=1"
                   className="item"
                   activeStyle={activeStyle}
                 >
                   Derma
                 </NavLink>
                 <NavLink
-                  to="/medicines/Central-Nervous-System"
+                  to="/medicines/Central-Nervous-System?page=1"
                   className="item"
                   activeStyle={activeStyle}
                 >
                   Central Nervous System
                 </NavLink>
                 <NavLink
-                  to="/medicines/Circulatory-System"
+                  to="/medicines/Circulatory-System?page=1"
                   className="item"
                   activeStyle={activeStyle}
                 >
                   Circulatory System
                 </NavLink>
                 <NavLink
-                  to="/medicines/Endocrine-System"
+                  to="/medicines/Endocrine-System?page=1"
                   className="item"
                   activeStyle={activeStyle}
                 >
                   Endocrine System
                 </NavLink>
                 <NavLink
-                  to="/medicines/Gestro-Intestinal-Tract"
+                  to="/medicines/Gestro-Intestinal-Tract?page=1"
                   className="item"
                   activeStyle={activeStyle}
                 >
                   Gastro Intestinal Tract
                 </NavLink>
-                <Dropdown text="view more" pointing item simple direction="left">
+                <Dropdown text="view more" item direction="left">
                   <Dropdown.Menu>
                     <Dropdown.Item>
                       <NavLink
@@ -145,4 +146,4 @@ const form = reduxForm({
   form: "Search form"
 })(Navbar);
 
-export default connect(null,{ isLoading })(form);
+export default form;

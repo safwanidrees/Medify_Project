@@ -8,14 +8,15 @@ import { getTypeMeds } from "../../actions";
 
 class HomePage extends React.Component {
   componentDidMount() {
-    this.props.getTypeMeds("Derma", 5);
-    this.props.getTypeMeds("Cardio-Vascular-System", 5);
+    ["Derma", "Cardio-Vascular-System"].forEach(type => {
+      this.props.getTypeMeds(type, 5);
+    });
   }
   renderPortfolio = () => {
     let list = [];
     if (Object.keys(this.props.medicines).length < 1) {
       for (let i = 0; i < 2; i++) {
-        list.push(<Portfolio showPlaceholder key={i} />);
+        list.push(<Portfolio showPlaceholder amount="5" key={i} />);
       }
     }
     _.forIn(this.props.medicines, (val, key) => {

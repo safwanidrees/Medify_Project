@@ -24,9 +24,8 @@ class MedicineDisplay extends React.Component {
   renderPortfolio = meds => {
     let list = [];
     if (!meds.hasOwnProperty(this.props.match.params.type)) {
-      for (let i = 0; i < 1; i++) {
-        list.push(<Portfolio showPlaceholder key={i} />);
-      }
+      for(let i=0; i<1; i++)
+        list.push(<Portfolio showPlaceholder amount="5" key={i}/>);
     }
     _.forIn(meds, (val, key) => {
       if (key === this.props.match.params.type) {

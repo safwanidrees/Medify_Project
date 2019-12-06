@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { getSingleMed } from "../../actions";
+import { getSingleMed, destroy } from "../../actions";
 import MedicineJSX from "./MedicineJSX";
 import { Segment } from "semantic-ui-react";
 
@@ -14,6 +14,9 @@ class MedicineItem extends React.Component {
     if (this.state.name !== this.props.name) {
       this.fetchData();
     }
+  }
+  componentWillUnmount() {
+    this.props.destroy("medicine");
   }
   fetchData = () => {
     const { name, type } = this.props;
@@ -36,4 +39,6 @@ const mapStateToProps = state => {
   return { medicine: state.selectedMed };
 };
 
-export default connect(mapStateToProps, { getSingleMed })(MedicineItem);
+export default connect(mapStateToProps, { getSingleMed, destroy })(
+  MedicineItem
+);

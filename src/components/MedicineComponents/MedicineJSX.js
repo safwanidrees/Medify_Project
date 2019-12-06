@@ -6,13 +6,16 @@ import {
   CardDescription,
   CardContent,
   CardMeta,
-  Icon
+  Icon,
+  Loader
 } from "semantic-ui-react";
 import { connect } from "react-redux";
 
 class MedicineJSX extends React.Component {
   renderMed() {
-   if (!this.props.medicine) {
+    if (!this.props.medicine) {
+      return <Loader active />;
+    } else if (this.props.medicine === "not found") {
       return (
         <Header icon>
           <Icon name="search" />
