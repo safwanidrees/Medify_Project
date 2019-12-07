@@ -8,7 +8,6 @@ import CustomPlaceholder from "../CustomPlacholder";
 class Portfolio extends React.Component {
   renderMeds = meds => {
     let list = [];
-    console.log(this.props.showPlaceholder)
     if (this.props.showPlaceholder) {
       for (let i = 0; i < this.props.amount; i++) {
         list.push(<CustomPlaceholder key={i} />);

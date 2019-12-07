@@ -4,12 +4,17 @@ import _ from "lodash";
 
 import "../../style.css";
 import Portfolio from "./Portfolio";
-import { getTypeMeds } from "../../actions";
+import { getTypeMeds, destroy } from "../../actions";
 
 class HomePage extends React.Component {
   componentDidMount() {
     ["Derma", "Cardio-Vascular-System"].forEach(type => {
       this.props.getTypeMeds(type, 5);
+    });
+  }
+  componentWillUnmount() {
+    ["Derma", "Cardio-Vascular-System"].forEach(type => {
+      this.props.destroy("medicines", type);
     });
   }
   renderPortfolio = () => {
@@ -44,4 +49,4 @@ const mapStateToProps = state => {
   return { medicines: state.typeMedicines };
 };
 
-export default connect(mapStateToProps, { getTypeMeds })(HomePage);
+export default connect(mapStateToProps, { getTypeMeds, destroy })(HomePage);

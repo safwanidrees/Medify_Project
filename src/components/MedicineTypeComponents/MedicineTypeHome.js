@@ -1,127 +1,70 @@
 import React from "react";
 import { connect } from "react-redux";
 import _ from "lodash";
-import { NavLink } from "react-router-dom";
-import {
-  Button,
-  Container,
-  Header,
-  Segment,
-  Card,
-  Image,
-  Grid
-} from "semantic-ui-react";
+import { Container, Header, Segment, Grid } from "semantic-ui-react";
 import queryString from "query-string";
 
+import PageButtons from "./PageButtons";
 import { getTypeMeds, destroy } from "../../actions";
+import CustomCard from "../CustomCard";
 
 class MedicineTypeHome extends React.Component {
-  state = { page: null, medArr: null };
+  state = { page: null, medArr: [], totalPages: null, type: null };
+
+  static getDerivedStateFromProps(props, state) {
+    // sets the type inside of state to be type inside url
+    state.type = props.match.params.type;
+
+    // sets the page inside of state to be page inside url
+    state.page = Number(queryString.parse(props.location.search).page);
+
+    // checks if the medicines of right type exists
+    if (!props.meds[state.type]) {
+      // if not then gets it
+      props.getTypeMeds(state.type, 50);
+    }
+
+    // sets medicines arr to array created from medicines object
+    state.medArr = _.values(
+      _.mapValues(props.meds[state.type], (value, key) => {
+        value["name"] = key;
+        return value;
+      })
+    );
+
+    // controls page flow
+    if (state.medArr) {
+      state.totalPages = Math.ceil(state.medArr.length / 10);
+      state.medArr = state.medArr.slice((state.page - 1) * 10, state.page * 10);
+    }
+
+    return state;
+  }
   componentDidMount() {
-    this.props.getTypeMeds(this.props.match.params.type, 50);
+    this.fetchData();
   }
   componentWillUnmount() {
     this.props.destroy("medicines", this.props.match.params.type);
   }
-  componentDidUpdate() {
-    const page = Number(queryString.parse(this.props.location.search).page);
-    if (this.state.page !== page) {
-      const final = this.pageManangement(page);
-      this.setState({
-        page,
-        medArr: final
-      });
-    }
-  }
-  pageManangement = page => {
-    let resultsPerPage, start, end, medArr, finalArr;
-    resultsPerPage = 10;
-    start = (page - 1) * resultsPerPage;
-    end = page * resultsPerPage;
-    medArr = _.values(
-      _.mapValues(
-        this.props.meds[this.props.match.params.type],
-        (value, key) => {
-          value["name"] = key;
-          return value;
-        }
-      )
+  fetchData = () => {
+    const { getTypeMeds } = this.props;
+    getTypeMeds(this.state.type, 50);
+  };
+  objToArr = () => {
+    const { meds, match } = this.props;
+    return _.values(
+      _.mapValues(meds[match.params.type], (value, key) => {
+        value["name"] = key;
+        return value;
+      })
     );
-    finalArr = medArr.slice(start, end);
-    return finalArr;
   };
   renderMedList() {
-    const { medArr } = this.state;
-    if (medArr) {
-      return medArr.map(med => {
-        return (
-          <Card key={med.name}>
-            <Image src={med.url} wrapped ui={false} />
-            <Card.Content>
-              <NavLink
-                to={`/medicine/${med.type}/${med.name}`}
-                activeStyle={{ textDecoration: "none" }}
-                className="item"
-              >
-                <Card.Header>{med.name}</Card.Header>
-              </NavLink>
-              <Card.Meta>
-                <span className="date">{med.type}</span>
-              </Card.Meta>
-              <Card.Description>Rs.{med.price}</Card.Description>
-            </Card.Content>
-          </Card>
-        );
-      });
-    }
+    return this.state.medArr.map(med => {
+      return <CustomCard med={med} key={med.name || 1} />;
+    });
   }
 
-  setupButtons = () => {
-    const { match, meds } = this.props;
-    if (meds && this.state.page) {
-      const totalPages = Math.ceil(
-        Object.keys(meds[match.params.type]).length / 10
-      );
-      const { page } = this.state;
-      console.log(page);
-      console.log(totalPages);
-      if (page === 1 && totalPages > 1) {
-        // show next button
-        return (
-          <NavLink
-            to={`/medicines/${this.props.match.params.type}?page=${page + 1}`}
-          >
-            <Button primary>Next</Button>
-          </NavLink>
-        );
-      } else if (totalPages > 1) {
-        // show previous button
-        return (
-          <NavLink
-            to={`/medicines/${this.props.match.params.type}?page=${page - 1}`}
-          >
-            <Button primary>previous</Button>
-          </NavLink>
-        );
-      } else if (page === totalPages && totalPages > 1) {
-        // show both buttons
-        return (
-          <React.Fragment>
-            <NavLink
-              to={`/medicines/${this.props.match.params.type}?page=${page - 1}`}
-            >
-              <Button primary>previous</Button>
-            </NavLink>
-            <NavLink
-              to={`/medicines/${this.props.match.params.type}?page=${page + 1}`}
-            >
-              <Button primary>Next</Button>
-            </NavLink>
-          </React.Fragment>
-        );
-      }
-    }
-  };
   render() {
     return (
       <Container style={{ margin: "50px 0", width: "90%" }}>
@@ -130,7 +73,13 @@ class MedicineTypeHome extends React.Component {
           <ul className="portfolio__items">{this.renderMedList()}</ul>
         </Segment>
         <Grid>
-          <Grid.Column textAlign="center">{this.setupButtons()}</Grid.Column>
+          <Grid.Column textAlign="center">
+            <PageButtons
+              type={this.props.match.params.type}
+              page={this.state.page}
+              totalPages={this.state.totalPages}
+            />
+          </Grid.Column>
         </Grid>
       </Container>
     );
