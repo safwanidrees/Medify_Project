@@ -24,6 +24,15 @@ const getMed = (med = null, action) => {
   }
 };
 
+const getSubstitute = (result = {}, action) => {
+  switch (action.type) {
+    case "SUBSTITUE_MEDS":
+      return { ...action.payload };
+    default:
+      return result;
+  }
+};
+
 const getSearchResults = (result = null, action) => {
   switch (action.type) {
     case "SEARCH_RESULT":
@@ -38,5 +47,6 @@ export default combineReducers({
   isLoading,
   typeMedicines: getTypeMeds,
   selectedMed: getMed,
-  searchResult: getSearchResults
+  searchResult: getSearchResults,
+  formulaMeds: getSubstitute
 });

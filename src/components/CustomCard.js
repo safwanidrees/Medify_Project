@@ -5,6 +5,7 @@ import {
   Image
 } from "semantic-ui-react";
 
+
 class CustomCard extends React.Component {
   state = { med: null };
   static getDerivedStateFromProps(props, state) {

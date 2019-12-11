@@ -73,6 +73,14 @@ class CustomForm extends React.Component {
             />
           </Form.Field>
           <Form.Field>
+            <Field
+              name="formula"
+              component={this.renderInput}
+              label="Formula"
+              type="text"
+            />
+          </Form.Field>
+          <Form.Field>
             <label>Type</label>
             <Field name="type" component="select">
               <option></option>

@@ -6,12 +6,11 @@ import MedicineJSX from "./MedicineJSX";
 import { Segment } from "semantic-ui-react";
 
 class MedicineItem extends React.Component {
-  state = { name: "" };
   componentDidMount() {
     this.fetchData();
   }
-  componentDidUpdate() {
-    if (this.state.name !== this.props.name) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.name !== this.props.name) {
       this.fetchData();
     }
   }
@@ -20,7 +19,6 @@ class MedicineItem extends React.Component {
   }
   fetchData = () => {
     const { name, type } = this.props;
-    this.setState({ name });
     this.props.getSingleMed(type, name);
   };
   renderMed() {

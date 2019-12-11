@@ -1,10 +1,14 @@
+// Responsible for creating actions to update state
+
 import * as firebase from "firebase";
 import _ from "lodash";
 
+// update loading state
 export const isLoading = isLoading => {
   return { type: "LOADING", payload: isLoading };
 };
 
+// update search result
 export const searchFor = term => async dispatch => {
   const snap = await firebase
     .database()
@@ -14,7 +18,10 @@ export const searchFor = term => async dispatch => {
   let result = "not found";
   _.forIn(snap.val(), val => {
     _.forIn(val, (val, key) => {
-      if (key.toLowerCase() === term.toLowerCase()) {
+      if (
+        key.toLowerCase() === term.toLowerCase() ||
+        val.formula.toLowerCase() === term.toLowerCase()
+      ) {
         result = { name: key, ...val };
         return false;
       }
@@ -23,6 +30,7 @@ export const searchFor = term => async dispatch => {
   dispatch({ type: "SEARCH_RESULT", payload: result });
 };
 
+// update single selected med
 export const getSingleMed = (type = null, med = null) => async dispatch => {
   const snap = await firebase
     .database()
@@ -34,6 +42,7 @@ export const getSingleMed = (type = null, med = null) => async dispatch => {
   dispatch({ type: "GET_MED", payload: { name: med, ...snap.val() } });
 };
 
+// update single type med
 export const getTypeMeds = (type = null, limit = 5) => async dispatch => {
   const snap = await firebase
     .database()
@@ -45,6 +54,25 @@ export const getTypeMeds = (type = null, limit = 5) => async dispatch => {
   dispatch({ type: "GET_MEDS", payload: { [type]: snap.val() } });
 };
 
+// update substitute meds based on formula
+export const getSubstituteMeds = (formula = null) => async dispatch => {
+  const snap = await firebase
+    .database()
+    .ref()
+    .child("medicines")
+    .once("value");
+  let result = {};
+  _.forIn(snap.val(), val => {
+    _.forIn(val, (val, key) => {
+      if (val.formula.toLowerCase() === formula.toLowerCase()) {
+        result[key] = { name: key, ...val };
+      }
+    });
+  });
+  dispatch({ type: "SUBSTITUE_MEDS", payload: { ...result } });
+};
+
+// destroys unnecessary data
 export const destroy = (type, opt) => async (dispatch, getState) => {
   if (type === "searchResult") {
     dispatch({ type: "SEARCH_RESULT", payload: null });

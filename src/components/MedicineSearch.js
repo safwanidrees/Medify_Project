@@ -1,25 +1,31 @@
 import React from "react";
 import { connect } from "react-redux";
-import _ from "lodash";
 
-import { searchFor, getTypeMeds, destroy } from "../actions";
+import { searchFor, getSubstituteMeds, destroy } from "../actions";
 import MedicineJSX from "./MedicineComponents/MedicineJSX";
 import Portfolio from "./homeComponents/Portfolio";
 import { Segment } from "semantic-ui-react";
 
 class MedicineSearch extends React.Component {
-  state = { term: "" };
   componentDidMount() {
     this.fetchData();
   }
-  componentDidUpdate() {
-    const { searchResult, sameTypeMeds, getTypeMeds, match } = this.props;
-    if (this.state.term !== match.params.term) {
+  componentDidUpdate(prevProps) {
+    const {
+      searchResult,
+      sameFormulaMeds,
+      getSubstituteMeds,
+      match
+    } = this.props;
+    if (prevProps.match.params.term !== match.params.term) {
       this.fetchData();
     }
-    if (searchResult !== "not found" && searchResult) {
-      if (!sameTypeMeds.hasOwnProperty(searchResult.type))
-        getTypeMeds(searchResult.type, 5);
+    if (
+      searchResult !== "not found" &&
+      searchResult &&
+      Object.keys(sameFormulaMeds).length === 0
+    ) {
+      getSubstituteMeds(searchResult.formula);
     }
   }
   componentWillUnmount() {
@@ -27,7 +33,6 @@ class MedicineSearch extends React.Component {
   }
   fetchData = () => {
     const { term } = this.props.match.params;
-    this.setState({ term });
     this.props.searchFor(term);
   };
   renderMed = () => (
@@ -38,25 +43,23 @@ class MedicineSearch extends React.Component {
   );
 
   renderPortfolio = () => {
-    const { searchResult, sameTypeMeds } = this.props;
+    const { searchResult, sameFormulaMeds } = this.props;
     let list = [];
-    if (searchResult) {
-      if (Object.keys(sameTypeMeds).length < 1) {
+    if (searchResult && searchResult !== "not found") {
+      if (Object.keys(sameFormulaMeds).length === 0) {
         for (let i = 0; i < 1; i++) {
           list.push(<Portfolio showPlaceholder amount="5" key={i} />);
         }
       }
-      _.forIn(sameTypeMeds, (val, key) => {
-        if (key === searchResult.type)
-          list.push(
-            <Portfolio
-              items={val}
-              type={key}
-              key={key}
-              header={`More ${key} Medicines`}
-            />
-          );
-      });
+      delete sameFormulaMeds[searchResult ? searchResult.name : ""];
+      list.push(
+        <Portfolio
+          items={sameFormulaMeds}
+          type={searchResult.type}
+          key="1"
+          header={"Substitute Medicines"}
+        />
+      );
       return list;
     }
   };
@@ -75,12 +78,12 @@ class MedicineSearch extends React.Component {
 const mapStateToProps = state => {
   return {
     searchResult: state.searchResult,
-    sameTypeMeds: state.typeMedicines
+    sameFormulaMeds: state.formulaMeds
   };
 };
 
 export default connect(mapStateToProps, {
   searchFor,
-  getTypeMeds,
+  getSubstituteMeds,
   destroy
 })(MedicineSearch);

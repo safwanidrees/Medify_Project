@@ -1,44 +1,39 @@
 import React from "react";
 import { connect } from "react-redux";
-import _ from "lodash";
 
-import { getTypeMeds } from "../../actions";
+import { getSubstituteMeds } from "../../actions";
 import Portfolio from "../homeComponents/Portfolio";
 import MedicineItem from "./MedicineItem";
 
 class MedicineDisplay extends React.Component {
-  state = { type: "" };
   componentDidMount() {
     this.fetchData();
   }
   componentDidUpdate() {
-    if (this.state.type !== this.props.match.params.type) {
-      this.fetchData();
-    }
+    this.fetchData();
   }
   fetchData = () => {
-    const { type } = this.props.match.params;
-    this.setState({ type });
-    this.props.getTypeMeds(type, 5);
-  };
-  renderPortfolio = meds => {
-    let list = [];
-    if (!meds.hasOwnProperty(this.props.match.params.type)) {
-      for(let i=0; i<1; i++)
-        list.push(<Portfolio showPlaceholder amount="5" key={i}/>);
+    const { selectedMed, sameFormulaMeds } = this.props;
+    if (selectedMed && Object.keys(sameFormulaMeds).length === 0) {
+      this.props.getSubstituteMeds(selectedMed.formula);
     }
-    _.forIn(meds, (val, key) => {
-      if (key === this.props.match.params.type) {
-        list.push(
-          <Portfolio
-            items={val}
-            type={key}
-            key={key}
-            header={`More ${key} Medicines`}
-          />
-        );
-      }
-    });
+  };
+  renderPortfolio = () => {
+    let list = [];
+    const { sameFormulaMeds, match } = this.props;
+    if (Object.keys(sameFormulaMeds).length === 0) {
+      for (let i = 0; i < 1; i++)
+        list.push(<Portfolio showPlaceholder amount="5" key={i} />);
+    }
+    delete sameFormulaMeds[match.params.name];
+    list.push(
+      <Portfolio
+        items={sameFormulaMeds}
+        type={match.params.type}
+        key="1"
+        header={"Substitute Medicines"}
+      />
+    );
 
     return list;
   };
@@ -47,14 +42,14 @@ class MedicineDisplay extends React.Component {
     return (
       <React.Fragment>
         <MedicineItem name={name} type={type} />
-        {this.renderPortfolio(this.props.sameTypeMeds)}
+        {this.renderPortfolio()}
       </React.Fragment>
     );
   }
 }
 
 const mapStateToProps = state => {
-  return { sameTypeMeds: state.typeMedicines };
+  return { sameFormulaMeds: state.formulaMeds, selectedMed: state.selectedMed };
 };
 
-export default connect(mapStateToProps, { getTypeMeds })(MedicineDisplay);
+export default connect(mapStateToProps, { getSubstituteMeds })(MedicineDisplay);

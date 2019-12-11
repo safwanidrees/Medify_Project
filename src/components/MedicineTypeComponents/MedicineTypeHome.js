@@ -43,21 +43,9 @@ class MedicineTypeHome extends React.Component {
   componentDidMount() {
     this.fetchData();
   }
-  componentWillUnmount() {
-    this.props.destroy("medicines", this.props.match.params.type);
-  }
   fetchData = () => {
     const { getTypeMeds } = this.props;
     getTypeMeds(this.state.type, 50);
-  };
-  objToArr = () => {
-    const { meds, match } = this.props;
-    return _.values(
-      _.mapValues(meds[match.params.type], (value, key) => {
-        value["name"] = key;
-        return value;
-      })
-    );
   };
   renderMedList() {
     return this.state.medArr.map(med => {

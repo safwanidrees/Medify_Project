@@ -19,13 +19,16 @@ class HomePage extends React.Component {
   }
   renderPortfolio = () => {
     let list = [];
-    if (Object.keys(this.props.medicines).length < 1) {
+    const {medicines} = this.props
+    if (Object.keys(medicines).length < 1) {
       for (let i = 0; i < 2; i++) {
         list.push(<Portfolio showPlaceholder amount="5" key={i} />);
       }
     }
-    _.forIn(this.props.medicines, (val, key) => {
-      list.push(<Portfolio items={val} type={key} key={key} header={key} />);
+    _.forIn(medicines, (val, key) => {
+      if (key === "Derma" || key === "Cardio-Vascular-System") {
+        list.push(<Portfolio items={val} type={key} key={key} header={key} />);
+      }
     });
     return list;
   };

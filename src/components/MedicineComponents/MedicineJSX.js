@@ -30,7 +30,12 @@ class MedicineJSX extends React.Component {
             <Image src={medicine.url} style={{ height: "500px" }} />
           </Grid.Column>
           <Grid.Column verticalAlign="middle">
-            <Header as="h1">{medicine.name}</Header>
+            <Header as="h1">
+              {medicine.name}<br />
+              <div style={{ fontSize: "17px" }}>
+                ({medicine.formula})
+              </div>
+            </Header>
             <CardMeta>
               <span className="date">{medicine.type}</span>
             </CardMeta>

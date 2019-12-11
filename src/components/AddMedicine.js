@@ -29,8 +29,9 @@ class AddMedicine extends React.Component {
           const medObj = {
             description: formValues.description,
             type: formValues.type,
-            price: formValues.price + ".00",
-            url
+            price: formValues.price,
+            url,
+            formula: formValues.formula
           };
           const rootRef = firebase
             .database()
