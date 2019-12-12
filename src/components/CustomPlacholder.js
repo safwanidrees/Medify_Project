@@ -1,31 +1,29 @@
 import React from "react";
 import { Placeholder, Card } from "semantic-ui-react";
 
-class CustomPlaceholder extends React.Component {
-  render() {
-    return (
-      <Card>
+const CustomPlaceholder = () => {
+  return (
+    <Card>
+      <Placeholder>
+        <Placeholder.Image square />
+      </Placeholder>
+      <Card.Content>
         <Placeholder>
-          <Placeholder.Image square />
+          <Placeholder.Line length="short" />
         </Placeholder>
-        <Card.Content>
+        <Card.Meta>
           <Placeholder>
-            <Placeholder.Line length="short" />
+            <Placeholder.Line length="medium" />
           </Placeholder>
-          <Card.Meta>
-            <Placeholder>
-              <Placeholder.Line length="medium" />
-            </Placeholder>
-          </Card.Meta>
-          <Card.Description>
-            <Placeholder>
-              <Placeholder.Line length="very short" />
-            </Placeholder>
-          </Card.Description>
-        </Card.Content>
-      </Card>
-    );
-  }
-}
+        </Card.Meta>
+        <Card.Description>
+          <Placeholder>
+            <Placeholder.Line length="very short" />
+          </Placeholder>
+        </Card.Description>
+      </Card.Content>
+    </Card>
+  );
+};
 
 export default CustomPlaceholder;

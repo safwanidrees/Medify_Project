@@ -1,42 +1,30 @@
-import React from "react";
-import { connect } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-import { getSingleMed, destroy } from "../../actions";
+import { getSingleMed } from "../../actions";
 import MedicineJSX from "./MedicineJSX";
 import { Segment } from "semantic-ui-react";
 
-class MedicineItem extends React.Component {
-  componentDidMount() {
-    this.fetchData();
-  }
-  componentDidUpdate(prevProps) {
-    if (prevProps.name !== this.props.name) {
-      this.fetchData();
-    }
-  }
-  componentWillUnmount() {
-    this.props.destroy("medicine");
-  }
-  fetchData = () => {
-    const { name, type } = this.props;
-    this.props.getSingleMed(type, name);
-  };
-  renderMed() {
-    return (
-      <Segment placeholder style={{ marginTop: "30px 0" }}>
-        <MedicineJSX medicine={this.props.medicine} />
-      </Segment>
-    );
-  }
-  render() {
-    return this.renderMed();
-  }
-}
+const MedicineItem = props => {
+  const [medName, setMedName] = useState(null);
+  const { name, type } = props;
 
-const mapStateToProps = state => {
-  return { medicine: state.selectedMed };
+  const dispatch = useDispatch();
+  const medicine = useSelector(({ selectedMed }) => selectedMed);
+
+  if (medName !== name) {
+    getSingleMed(type, name).then(data => {
+      dispatch({ type: "GET_MED", payload: data });
+      props.getSubstitute(data)
+    });
+    setMedName(name);
+  }
+
+  return (
+    <Segment placeholder style={{ marginTop: "30px 0" }}>
+      <MedicineJSX medicine={medicine} />
+    </Segment>
+  );
 };
 
-export default connect(mapStateToProps, { getSingleMed, destroy })(
-  MedicineItem
-);
+export default MedicineItem;

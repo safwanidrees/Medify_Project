@@ -1,55 +1,47 @@
 import React from "react";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { getSubstituteMeds } from "../../actions";
 import Portfolio from "../homeComponents/Portfolio";
 import MedicineItem from "./MedicineItem";
 
-class MedicineDisplay extends React.Component {
-  componentDidMount() {
-    this.fetchData();
+const renderPortfolio = (sameFormulaMeds, match) => {
+  let list = [];
+  if (Object.keys(sameFormulaMeds).length === 0) {
+    for (let i = 0; i < 1; i++)
+      list.push(<Portfolio showPlaceholder amount="5" key={i} />);
   }
-  componentDidUpdate() {
-    this.fetchData();
-  }
-  fetchData = () => {
-    const { selectedMed, sameFormulaMeds } = this.props;
-    if (selectedMed && Object.keys(sameFormulaMeds).length === 0) {
-      this.props.getSubstituteMeds(selectedMed.formula);
-    }
-  };
-  renderPortfolio = () => {
-    let list = [];
-    const { sameFormulaMeds, match } = this.props;
-    if (Object.keys(sameFormulaMeds).length === 0) {
-      for (let i = 0; i < 1; i++)
-        list.push(<Portfolio showPlaceholder amount="5" key={i} />);
-    }
-    delete sameFormulaMeds[match.params.name];
-    list.push(
-      <Portfolio
-        items={sameFormulaMeds}
-        type={match.params.type}
-        key="1"
-        header={"Substitute Medicines"}
-      />
-    );
+  delete sameFormulaMeds[match.params.name];
+  list.push(
+    <Portfolio
+      items={sameFormulaMeds}
+      type={match.params.type}
+      key="1"
+      header={"Substitute Medicines"}
+    />
+  );
 
-    return list;
-  };
-  render() {
-    const { name, type } = this.props.match.params;
-    return (
-      <React.Fragment>
-        <MedicineItem name={name} type={type} />
-        {this.renderPortfolio()}
-      </React.Fragment>
-    );
-  }
-}
-
-const mapStateToProps = state => {
-  return { sameFormulaMeds: state.formulaMeds, selectedMed: state.selectedMed };
+  return list;
 };
 
-export default connect(mapStateToProps, { getSubstituteMeds })(MedicineDisplay);
+const MedicineDisplay = props => {
+  const { name, type } = props.match.params;
+
+  const dispatch = useDispatch();
+  const sameFormulaMeds = useSelector(({ formulaMeds }) => formulaMeds);
+
+  const getSubstitute = (medicine) => {
+    getSubstituteMeds(medicine.formula).then(data => {
+      dispatch({ type: "SUBSTITUE_MEDS", payload: data });
+    });
+  }
+
+  return (
+    <React.Fragment>
+      <MedicineItem name={name} type={type} getSubstitute={getSubstitute} />
+      {renderPortfolio(sameFormulaMeds, props.match)}
+    </React.Fragment>
+  );
+};
+
+export default MedicineDisplay;

@@ -6,41 +6,41 @@ import { Header, Button, Placeholder } from "semantic-ui-react";
 import CustomPlaceholder from "../CustomPlacholder";
 import CustomCard from "../CustomCard";
 
-class Portfolio extends React.Component {
-  renderMeds = () => {
-    let list = [];
-    if (this.props.showPlaceholder) {
-      for (let i = 0; i < this.props.amount; i++) {
-        list.push(<CustomPlaceholder key={i} />);
-      }
-    } else {
-      _.forIn(this.props.items, (val, key) => {
-        list.push(<CustomCard med={{ name: key, ...val }} key={key}/>);
-      });
-    }
-    return list;
-  };
-  render() {
-    return (
-      <section className="portfolio">
-        <Header as="h1">
-          {this.props.showPlaceholder ? (
-            <Placeholder>
-              <Placeholder.Line length="long" />
-            </Placeholder>
-          ) : (
-            this.props.header
+/** MAIN COMPONENT */
+const Portfolio = props => {
+  return (
+    <section className="portfolio">
+      <Header as="h1">
+        {props.showPlaceholder ? (
+          <Placeholder>
+            <Placeholder.Line length="long" />
+          </Placeholder>
+        ) : (
+          props.header
+        )}
+        <NavLink to={`/medicines/${props.type}?page=1`}>
+          {props.showPlaceholder ? null : (
+            <Button floated="right">Browse All</Button>
           )}
-          <NavLink to={`/medicines/${this.props.type}?page=1`}>
-            {this.props.showPlaceholder ? null : (
-              <Button floated="right">Browse All</Button>
-            )}
-          </NavLink>
-        </Header>
-        <ul className="portfolio__items">{this.renderMeds()}</ul>
-      </section>
-    );
+        </NavLink>
+      </Header>
+      <ul className="portfolio__items">{renderMeds(props)}</ul>
+    </section>
+  );
+};
+
+const renderMeds = props => {
+  let list = [];
+  if (props.showPlaceholder) {
+    for (let i = 0; i < props.amount; i++) {
+      list.push(<CustomPlaceholder key={i} />);
+    }
+  } else {
+    _.forIn(props.items, (val, key) => {
+      list.push(<CustomCard med={{ name: key, ...val }} key={key} />);
+    });
   }
-}
+  return list;
+};
 
 export default Portfolio;

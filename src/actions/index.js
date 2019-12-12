@@ -9,7 +9,7 @@ export const isLoading = isLoading => {
 };
 
 // update search result
-export const searchFor = term => async dispatch => {
+export const searchFor = async term => {
   const snap = await firebase
     .database()
     .ref()
@@ -27,11 +27,11 @@ export const searchFor = term => async dispatch => {
       }
     });
   });
-  dispatch({ type: "SEARCH_RESULT", payload: result });
+  return result;
 };
 
 // update single selected med
-export const getSingleMed = (type = null, med = null) => async dispatch => {
+export const getSingleMed = async (type = "", med = "") => {
   const snap = await firebase
     .database()
     .ref()
@@ -39,7 +39,7 @@ export const getSingleMed = (type = null, med = null) => async dispatch => {
     .child(type)
     .child(med)
     .once("value");
-  dispatch({ type: "GET_MED", payload: { name: med, ...snap.val() } });
+  return { name: med, ...snap.val() };
 };
 
 // update single type med
@@ -54,8 +54,19 @@ export const getTypeMeds = (type = null, limit = 5) => async dispatch => {
   dispatch({ type: "GET_MEDS", payload: { [type]: snap.val() } });
 };
 
+export const getMeds = async (type = null, limit = 5) => {
+  const snap = await firebase
+    .database()
+    .ref()
+    .child("medicines")
+    .child(type)
+    .limitToFirst(limit)
+    .once("value");
+  return { [type]: snap.val() };
+};
+
 // update substitute meds based on formula
-export const getSubstituteMeds = (formula = null) => async dispatch => {
+export const getSubstituteMeds = async (formula = null) => {
   const snap = await firebase
     .database()
     .ref()
@@ -69,11 +80,11 @@ export const getSubstituteMeds = (formula = null) => async dispatch => {
       }
     });
   });
-  dispatch({ type: "SUBSTITUE_MEDS", payload: { ...result } });
+  return { ...result };
 };
 
 // destroys unnecessary data
-export const destroy = (type, opt) => async (dispatch, getState) => {
+export const destroy = (type, opt) => (dispatch, getState) => {
   if (type === "searchResult") {
     dispatch({ type: "SEARCH_RESULT", payload: null });
   } else if (type === "medicine") {

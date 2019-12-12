@@ -9,21 +9,20 @@ import {
   Icon,
   Loader
 } from "semantic-ui-react";
-import { connect } from "react-redux";
 
-class MedicineJSX extends React.Component {
-  renderMed() {
-    if (!this.props.medicine) {
+const MedicineJSX = props => {
+  const renderMed = () => {
+    if (!props.medicine) {
       return <Loader active />;
-    } else if (this.props.medicine === "not found") {
+    } else if (props.medicine === "not found") {
       return (
         <Header icon>
           <Icon name="search" />
           {this.props.message}
         </Header>
       );
-    } else if (this.props.medicine) {
-      const { medicine } = this.props;
+    } else if (props.medicine) {
+      const { medicine } = props;
       return (
         <Grid columns={2} relaxed="very" stackable>
           <Grid.Column>
@@ -31,10 +30,9 @@ class MedicineJSX extends React.Component {
           </Grid.Column>
           <Grid.Column verticalAlign="middle">
             <Header as="h1">
-              {medicine.name}<br />
-              <div style={{ fontSize: "17px" }}>
-                ({medicine.formula})
-              </div>
+              {medicine.name}
+              <br />
+              <div style={{ fontSize: "17px" }}>({medicine.formula})</div>
             </Header>
             <CardMeta>
               <span className="date">{medicine.type}</span>
@@ -49,14 +47,8 @@ class MedicineJSX extends React.Component {
         </Grid>
       );
     }
-  }
-  render() {
-    return this.renderMed();
-  }
-}
-
-const mapStateToProps = ({ isLoading }) => {
-  return { isDataLoading: isLoading };
+  };
+  return renderMed();
 };
 
-export default connect(mapStateToProps)(MedicineJSX);
+export default MedicineJSX;
