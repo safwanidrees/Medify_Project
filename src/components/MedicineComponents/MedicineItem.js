@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { getSingleMed } from "../../actions";
@@ -15,10 +15,16 @@ const MedicineItem = props => {
   if (medName !== name) {
     getSingleMed(type, name).then(data => {
       dispatch({ type: "GET_MED", payload: data });
-      props.getSubstitute(data)
+      props.getSubstitute(data);
     });
     setMedName(name);
   }
+
+  useEffect(() => {
+    return () => {
+      dispatch({ type: "GET_MED", payload: null });
+    };
+  }, []);
 
   return (
     <Segment placeholder style={{ marginTop: "30px 0" }}>

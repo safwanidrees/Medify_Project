@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch, useStore } from "react-redux";
 import _ from "lodash";
 import { Container, Header, Segment, Grid } from "semantic-ui-react";
 import queryString from "query-string";
 
 import PageButtons from "./PageButtons";
-import { getMeds, destroy } from "../../actions";
+import { getMeds } from "../../actions";
 import CustomCard from "../CustomCard";
 
 const renderMedList = medArr => {
@@ -21,20 +21,25 @@ const MedicineTypeHome = props => {
   const [type, setType] = useState(null);
   const [displayArr, setDisplayArr] = useState([]);
 
-  const dispatch = useDispatch()
-  const meds = useSelector(state => state.typeMedicines)
+  const dispatch = useDispatch();
+  const meds = useSelector(state => state.typeMedicines);
+  const store = useStore();
+
   const currPage = Number(queryString.parse(props.location.search).page);
 
   useEffect(() => {
     (async () => {
       const data = await getMeds(props.match.params.type, 50);
-      dispatch({ type: "GET_MEDS", payload: data})
+      dispatch({ type: "GET_MEDS", payload: data });
       setType(props.match.params.type);
       setDisplayArr([]);
       setMedArr([]);
       setTotalPages(null);
       setPage(null);
     })();
+    return () => {
+      delete store.getState().typeMedicines[type];
+    };
   }, [props.match.params.type]);
 
   if (meds[type] && medArr.length === 0) {
@@ -62,11 +67,7 @@ const MedicineTypeHome = props => {
       </Segment>
       <Grid>
         <Grid.Column textAlign="center">
-          <PageButtons
-            type={type}
-            page={page}
-            totalPages={totalPages}
-          />
+          <PageButtons type={type} page={page} totalPages={totalPages} />
         </Grid.Column>
       </Grid>
     </Container>
@@ -134,5 +135,4 @@ const MedicineTypeHome = props => {
 //   }
 // }
 
-export default MedicineTypeHome
-
+export default MedicineTypeHome;

@@ -42,18 +42,6 @@ export const getSingleMed = async (type = "", med = "") => {
   return { name: med, ...snap.val() };
 };
 
-// update single type med
-export const getTypeMeds = (type = null, limit = 5) => async dispatch => {
-  const snap = await firebase
-    .database()
-    .ref()
-    .child("medicines")
-    .child(type)
-    .limitToFirst(limit)
-    .once("value");
-  dispatch({ type: "GET_MEDS", payload: { [type]: snap.val() } });
-};
-
 export const getMeds = async (type = null, limit = 5) => {
   const snap = await firebase
     .database()

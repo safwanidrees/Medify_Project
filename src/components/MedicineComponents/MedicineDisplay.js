@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { getSubstituteMeds } from "../../actions";
@@ -30,11 +30,17 @@ const MedicineDisplay = props => {
   const dispatch = useDispatch();
   const sameFormulaMeds = useSelector(({ formulaMeds }) => formulaMeds);
 
-  const getSubstitute = (medicine) => {
+  const getSubstitute = medicine => {
     getSubstituteMeds(medicine.formula).then(data => {
       dispatch({ type: "SUBSTITUE_MEDS", payload: data });
     });
-  }
+  };
+
+  useEffect(() => {
+    return () => {
+      dispatch({ type: "SUBSTITUE_MEDS", payload: {} });
+    };
+  }, []);
 
   return (
     <React.Fragment>

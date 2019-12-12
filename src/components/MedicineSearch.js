@@ -42,9 +42,10 @@ const MedicineSearch = props => {
       const data = await searchFor(props.match.params.term);
       dispatch({ type: "SEARCH_RESULT", payload: data });
     })();
-    // return () => {
-    //   props.destroy("searchResult");
-    // };
+    return () => {
+      console.log("called")
+      dispatch({ type: "SEARCH_RESULT", payload: null });
+    };
   }, [props.match.params.term]);
   if (
     searchResult !== "not found" &&
