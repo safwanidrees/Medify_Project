@@ -25,9 +25,14 @@ const renderMed = med => {
             <Card.Header>{med.name}</Card.Header>
           </NavLink>
           <Card.Meta>
-            <span className="date">{med.type}</span>
+            <span className="date">{med.formula}</span>
           </Card.Meta>
           <Card.Description>Rs.{med.price}</Card.Description>
+        </Card.Content>
+        <Card.Content extra>
+          <div>
+            {med.type}
+          </div>
         </Card.Content>
       </Card>
     );

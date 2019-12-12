@@ -4,15 +4,31 @@ import _ from "lodash";
 
 import "../../style.css";
 import Portfolio from "./Portfolio";
-import { getMeds, destroy } from "../../actions";
+import { getMeds } from "../../actions";
+
+// renders portfolio
+const renderPortfolio = medicines => {
+  let list = [];
+  if (Object.keys(medicines).length < 1) {
+    for (let i = 0; i < 2; i++)
+      list.push(<Portfolio showPlaceholder amount="5" key={i} />);
+  }
+  _.forIn(medicines, (val, key) => {
+    if (key === "Derma" || key === "Cardio-Vascular-System") {
+      list.push(<Portfolio items={val} type={key} key={key} header={key} />);
+    }
+  });
+  return list;
+};
 
 /** MAIN COMPONENT */
 const HomePage = () => {
+  // required functionality
   const dispatch = useDispatch();
   const medicines = useSelector(state => state.typeMedicines);
-  const store = useStore()
+  const store = useStore();
+
   useEffect(() => {
-    
     // on mounting
     (() => {
       ["Derma", "Cardio-Vascular-System"].forEach(async type => {
@@ -20,13 +36,14 @@ const HomePage = () => {
         dispatch({ type: "GET_MEDS", payload: data });
       });
     })();
-    // // on unmounting
+
+    // on unmounting
     return () => {
       ["Derma", "Cardio-Vascular-System"].forEach(type => {
-        delete store.getState().typeMedicines[type]
+        delete store.getState().typeMedicines[type];
       });
     };
-  }, []);
+  }, [dispatch, store]);
 
   return (
     <React.Fragment>
@@ -40,21 +57,6 @@ const HomePage = () => {
       {renderPortfolio(medicines)}
     </React.Fragment>
   );
-};
-
-const renderPortfolio = medicines => {
-  let list = [];
-  if (Object.keys(medicines).length < 1) {
-    for (let i = 0; i < 2; i++) {
-      list.push(<Portfolio showPlaceholder amount="5" key={i} />);
-    }
-  }
-  _.forIn(medicines, (val, key) => {
-    if (key === "Derma" || key === "Cardio-Vascular-System") {
-      list.push(<Portfolio items={val} type={key} key={key} header={key} />);
-    }
-  });
-  return list;
 };
 
 export default HomePage;

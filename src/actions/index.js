@@ -70,15 +70,3 @@ export const getSubstituteMeds = async (formula = null) => {
   });
   return { ...result };
 };
-
-// destroys unnecessary data
-export const destroy = (type, opt) => (dispatch, getState) => {
-  if (type === "searchResult") {
-    dispatch({ type: "SEARCH_RESULT", payload: null });
-  } else if (type === "medicine") {
-    dispatch({ type: "GET_MED", payload: null });
-  } else if (type === "medicines") {
-    delete getState().typeMedicines[opt];
-    dispatch({ type: "GET_MEDS", payload: null });
-  }
-};

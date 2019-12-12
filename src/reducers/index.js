@@ -1,46 +1,11 @@
 import { combineReducers } from "redux";
 import { reducer as formReducer } from "redux-form";
 
-const isLoading = (isLoading = false, action) => {
-  if (action.type === "LOADING") return action.payload;
-  return isLoading;
-};
-
-const getTypeMeds = (state = {}, action) => {
-  switch (action.type) {
-    case "GET_MEDS":
-      return { ...state, ...action.payload };
-    default:
-      return state;
-  }
-};
-
-const getMed = (med = null, action) => {
-  switch (action.type) {
-    case "GET_MED":
-      return action.payload;
-    default:
-      return med;
-  }
-};
-
-const getSubstitute = (result = {}, action) => {
-  switch (action.type) {
-    case "SUBSTITUE_MEDS":
-      return { ...action.payload };
-    default:
-      return result;
-  }
-};
-
-const getSearchResults = (result = null, action) => {
-  switch (action.type) {
-    case "SEARCH_RESULT":
-      return action.payload;
-    default:
-      return result;
-  }
-};
+import isLoading from "./isLoading";
+import getTypeMeds from "./getTypeMeds";
+import getMed from "./getMed";
+import getSearchResults from "./getSearchResult";
+import getSubstitute from "./getSubstitute";
 
 export default combineReducers({
   form: formReducer,

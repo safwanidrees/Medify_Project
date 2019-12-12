@@ -32,6 +32,7 @@ const setupButtons = ({ page, totalPages, type }) => {
   }
 };
 
+/** MAIN COMPONENT */
 const PageButtons = props => {
     return <div>{setupButtons(props)}</div>;
 }

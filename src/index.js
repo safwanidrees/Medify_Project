@@ -8,6 +8,7 @@ import * as firebase from "firebase";
 import App from "./components/App";
 import reducers from "./reducers";
 
+// firebase setup
 const firebaseConfig = {
   apiKey: "AIzaSyB6059Dd9NGi34Wy4uH1L2tPKStWHg0Ww8",
   authDomain: "medify-bad90.firebaseapp.com",
@@ -20,9 +21,11 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
+// redux dev tools setup
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(reducers, composeEnhancers(applyMiddleware(thunk)));
 
+// apps setup
 ReactDOM.render(
   <Provider store={store}>
     <App />
