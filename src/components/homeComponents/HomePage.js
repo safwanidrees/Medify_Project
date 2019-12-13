@@ -4,20 +4,24 @@ import _ from "lodash";
 
 import "../../style.css";
 import Portfolio from "./Portfolio";
+import PortfolioPlaceholder from "../PortfolioPlaceholder";
 import { getMeds } from "../../actions";
 
 // renders portfolio
-const renderPortfolio = medicines => {
+const renderPortfolio = (medicines, isLoading) => {
   let list = [];
-  if (Object.keys(medicines).length < 1) {
+  if (isLoading) {
     for (let i = 0; i < 2; i++)
-      list.push(<Portfolio showPlaceholder amount="5" key={i} />);
+      list.push(<PortfolioPlaceholder amount="5" key={i} />);
+  } else {
+    _.forIn(medicines, (val, key) => {
+      if (key === "Derma" || key === "Cardio-Vascular-System") {
+        list.push(
+          <Portfolio showButton items={val} type={key} key={key} header={key} />
+        );
+      }
+    });
   }
-  _.forIn(medicines, (val, key) => {
-    if (key === "Derma" || key === "Cardio-Vascular-System") {
-      list.push(<Portfolio items={val} type={key} key={key} header={key} />);
-    }
-  });
   return list;
 };
 
@@ -25,13 +29,19 @@ const renderPortfolio = medicines => {
 const HomePage = () => {
   // required functionality
   const dispatch = useDispatch();
-  const medicines = useSelector(state => state.typeMedicines);
+  const medicines = useSelector(({ typeMedicines }) => typeMedicines);
+  const isLoading = useSelector(({ isLoading }) => isLoading);
   const store = useStore();
+
+  if (Object.keys(medicines).length !== 0 && isLoading) {
+    dispatch({ type: "LOADING", payload: false });
+  }
 
   useEffect(() => {
     // on mounting
     (() => {
       ["Derma", "Cardio-Vascular-System"].forEach(async type => {
+        dispatch({ type: "LOADING", payload: true });
         const data = await getMeds(type, 5);
         dispatch({ type: "GET_MEDS", payload: data });
       });
@@ -54,7 +64,7 @@ const HomePage = () => {
           you'll find it here
         </h1>
       </section>
-      {renderPortfolio(medicines)}
+      {renderPortfolio(medicines, isLoading)}
     </React.Fragment>
   );
 };

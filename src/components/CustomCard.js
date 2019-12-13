@@ -15,10 +15,10 @@ const renderMed = med => {
   if (med) {
     return (
       <Card key={med.name}>
-        <Image src={med.url} wrapped ui={false} />
+        <Image src={med.url} wrapped ui={false} style={{ height: "150px"}}/>
         <Card.Content>
           <NavLink
-            to={`/medicine/${med.type}/${med.name}`}
+            to={`/medicine/${med.type}/${med.name.replace("%", "")}`}
             activeStyle={{ textDecoration: "none" }}
             className="item"
           >
@@ -30,9 +30,7 @@ const renderMed = med => {
           <Card.Description>Rs.{med.price}</Card.Description>
         </Card.Content>
         <Card.Content extra>
-          <div>
-            {med.type}
-          </div>
+          <div>{med.type}</div>
         </Card.Content>
       </Card>
     );

@@ -97,6 +97,11 @@ class CustomForm extends React.Component {
               <option value="Gestro-Instetinal-Tract">
                 Getro-Instatinal-Tract
               </option>
+              <option value="Derpression">Derpression</option>
+              <option value="Eyes-Nose-Ear">Eyes-Nose-Ear</option>
+              <option value="Fever-and-Pain">Fever and Pain</option>
+              <option value="Infection">Infection</option>
+              <option value="Supplement">Supplement</option>
             </Field>
           </Form.Field>
           <Form.Field>

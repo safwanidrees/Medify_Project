@@ -106,29 +106,47 @@ class Navbar extends React.Component {
                   <Dropdown.Menu>
                     <Dropdown.Item>
                       <NavLink
-                        to="/medicines/Gestro-Intestinal-Tract"
+                        to="/medicines/Depression?page=1"
                         className="item"
                         activeStyle={activeStyle}
                       >
-                        test
+                        Depression
                       </NavLink>
                     </Dropdown.Item>
                     <Dropdown.Item>
                       <NavLink
-                        to="/medicines/Gestro-Intestinal-Tract"
+                        to="/medicines/Eyes-Nose-Ear?page=1"
                         className="item"
                         activeStyle={activeStyle}
                       >
-                        test
+                        Eyes-Nose-Ear
                       </NavLink>
                     </Dropdown.Item>
                     <Dropdown.Item>
                       <NavLink
-                        to="/medicines/Gestro-Intestinal-Tract"
+                        to="/medicines/Fever-and-Pain?page=1"
                         className="item"
                         activeStyle={activeStyle}
                       >
-                        testing the Dropdown button
+                        Fever and Pain
+                      </NavLink>
+                    </Dropdown.Item>
+                    <Dropdown.Item>
+                      <NavLink
+                        to="/medicines/Infection?page=1"
+                        className="item"
+                        activeStyle={activeStyle}
+                      >
+                        Infection
+                      </NavLink>
+                    </Dropdown.Item>
+                    <Dropdown.Item>
+                      <NavLink
+                        to="/medicines/Supplement?page=1"
+                        className="item"
+                        activeStyle={activeStyle}
+                      >
+                        Supplement
                       </NavLink>
                     </Dropdown.Item>
                   </Dropdown.Menu>

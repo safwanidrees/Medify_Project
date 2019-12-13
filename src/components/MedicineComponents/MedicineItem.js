@@ -34,7 +34,7 @@ const MedicineItem = props => {
   }, [dispatch]);
 
   return (
-    <Segment placeholder style={{ marginTop: "30px 0" }}>
+    <Segment placeholder style={{ marginTop: "30px 0", minHeight: "580px" }}>
       <MedicineJSX medicine={medicine} />
     </Segment>
   );

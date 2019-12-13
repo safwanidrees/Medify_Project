@@ -10,15 +10,15 @@ const setupButtons = ({ page, totalPages, type }) => {
         <Button primary>Next</Button>
       </NavLink>
     );
-  } else if (totalPages > 1) {
-    // show previous button
+  } else if (page === totalPages && totalPages > 1) {
+    // show both buttons
     return (
       <NavLink to={`/medicines/${type}?page=${page - 1}`}>
         <Button primary>previous</Button>
       </NavLink>
     );
-  } else if (page === totalPages && totalPages > 1) {
-    // show both buttons
+  } else if (totalPages > 1) {
+    // show previous button
     return (
       <React.Fragment>
         <NavLink to={`/medicines/${type}?page=${page - 1}`}>
@@ -34,7 +34,7 @@ const setupButtons = ({ page, totalPages, type }) => {
 
 /** MAIN COMPONENT */
 const PageButtons = props => {
-    return <div>{setupButtons(props)}</div>;
-}
+  return <div>{setupButtons(props)}</div>;
+};
 
 export default PageButtons;

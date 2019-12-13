@@ -7,11 +7,6 @@ import MedicineJSX from "./MedicineComponents/MedicineJSX";
 import Portfolio from "./homeComponents/Portfolio";
 import { Segment } from "semantic-ui-react";
 
-// renders single med
-const renderMed = searchResult => (
-  <MedicineJSX medicine={searchResult} message="No results found" />
-);
-
 // renders portfolio
 const renderPortfolio = (searchResult, sameFormulaMeds) => {
   let list = [];
@@ -27,7 +22,8 @@ const renderPortfolio = (searchResult, sameFormulaMeds) => {
         items={sameFormulaMeds}
         type={searchResult.type}
         key="1"
-        header={"Substitute Medicines"}
+        header="Substitute Medicines"
+        showButton={false}
       />
     );
     return list;
@@ -53,7 +49,6 @@ const MedicineSearch = props => {
 
     // on unmounting
     return () => {
-      console.log("called");
       dispatch({ type: "SEARCH_RESULT", payload: null });
     };
   }, [props.match.params.term, dispatch]);
@@ -73,8 +68,8 @@ const MedicineSearch = props => {
 
   return (
     <React.Fragment>
-      <Segment placeholder style={{ marginTop: "30px" }}>
-        {renderMed(searchResult)}
+      <Segment placeholder style={{ marginTop: "30px", minHeight: "580px" }}>
+        <MedicineJSX medicine={searchResult} message="No results found" />
       </Segment>
       {renderPortfolio(searchResult, sameFormulaMeds)}
     </React.Fragment>

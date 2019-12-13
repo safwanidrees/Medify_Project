@@ -35,7 +35,7 @@ const MedicineTypeHome = props => {
   useEffect(() => {
     // on mounting and updating the type
     (async () => {
-      const data = await getMeds(props.match.params.type, 50);
+      const data = await getMeds(props.match.params.type, 500);
       dispatch({ type: "GET_MEDS", payload: data });
       setType(props.match.params.type);
       setDisplayArr([]);
@@ -66,12 +66,12 @@ const MedicineTypeHome = props => {
 
   // checks if the total pages is set or not
   if (medArr.length !== 0 && !totalPages) {
-    setTotalPages(Math.ceil(medArr.length / 10));
+    setTotalPages(Math.ceil(medArr.length / 12));
   }
 
   // checks if page is changed or not
   if (page !== currPage && medArr.length !== 0) {
-    setDisplayArr(medArr.slice((currPage - 1) * 10, currPage * 10));
+    setDisplayArr(medArr.slice((currPage - 1) * 12, currPage * 12));
     setPage(currPage);
   }
 
@@ -116,8 +116,8 @@ const MedicineTypeHome = props => {
 
 //     // controls page flow
 //     if (state.medArr) {
-//       state.totalPages = Math.ceil(state.medArr.length / 10);
-//       state.medArr = state.medArr.slice((state.page - 1) * 10, state.page * 10);
+//       state.totalPages = Math.ceil(state.medArr.length / 12);
+//       state.medArr = state.medArr.slice((state.page - 1) * 12, state.page * 12);
 //     }
 
 //     return state;
