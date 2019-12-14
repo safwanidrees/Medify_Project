@@ -45,6 +45,7 @@ class Navbar extends React.Component {
                       placeholder="Search..."
                       component="input"
                       className="search__field"
+                      
                     />
                     <Button>
                       <Icon name="search" />
@@ -82,21 +83,21 @@ class Navbar extends React.Component {
                   Central Nervous System
                 </NavLink>
                 <NavLink
-                  to="/medicines/Circulatory-System?page=1"
+                  to="/medicines/Fever and Pain?page=1"
                   className="item"
                   activeStyle={activeStyle}
                 >
-                  Circulatory System
+                  Fever / Pain
                 </NavLink>
                 <NavLink
-                  to="/medicines/Endocrine-System?page=1"
+                  to="/medicines/Infection?page=1"
                   className="item"
                   activeStyle={activeStyle}
                 >
-                  Endocrine System
+                  Infection
                 </NavLink>
                 <NavLink
-                  to="/medicines/Gestro-Intestinal-Tract?page=1"
+                  to="/medicines/Gestro-Instetinal-Tract?page=1"
                   className="item"
                   activeStyle={activeStyle}
                 >
@@ -104,6 +105,16 @@ class Navbar extends React.Component {
                 </NavLink>
                 <Dropdown text="view more" item direction="left">
                   <Dropdown.Menu>
+                    <Dropdown.Item>
+                     
+                      <NavLink
+                        to="/medicines/Supplement?page=1"
+                        className="item"
+                        activeStyle={activeStyle}
+                      >
+                        Supplement
+                      </NavLink>
+                    </Dropdown.Item>
                     <Dropdown.Item>
                       <NavLink
                         to="/medicines/Depression?page=1"
@@ -122,33 +133,6 @@ class Navbar extends React.Component {
                         Eyes-Nose-Ear
                       </NavLink>
                     </Dropdown.Item>
-                    <Dropdown.Item>
-                      <NavLink
-                        to="/medicines/Fever-and-Pain?page=1"
-                        className="item"
-                        activeStyle={activeStyle}
-                      >
-                        Fever and Pain
-                      </NavLink>
-                    </Dropdown.Item>
-                    <Dropdown.Item>
-                      <NavLink
-                        to="/medicines/Infection?page=1"
-                        className="item"
-                        activeStyle={activeStyle}
-                      >
-                        Infection
-                      </NavLink>
-                    </Dropdown.Item>
-                    <Dropdown.Item>
-                      <NavLink
-                        to="/medicines/Supplement?page=1"
-                        className="item"
-                        activeStyle={activeStyle}
-                      >
-                        Supplement
-                      </NavLink>
-                    </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
               </ul>
@@ -157,6 +141,7 @@ class Navbar extends React.Component {
         </section>
       </div>
     );
+
   }
 }
 
