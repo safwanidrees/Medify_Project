@@ -84,24 +84,27 @@ class CustomForm extends React.Component {
             <label>Type</label>
             <Field name="type" component="select">
               <option></option>
-              <option value="Cardio-Vascular-System">
+             <option value="Cardio-Vascular-System">
                 Cardio-Vascular System
               </option>
+              <option value="Derma">Derma</option>
               <option value="Central-Nervous-System">
                 Central Nervous System
               </option>
-              <option value="Circulatory-System">Circulatory System</option>
-              <option value="Derma">Derma</option>
-              <option value="Endocrine-System">Endocrine System</option>
-              <option value="Eyes-Nose-Ear">Eyes, Nose, Ear</option>
+             
+              {/* <option value="Circulatory-System">Circulatory System</option>
+               */}
+             
+              <option value="Fever and Pain">Fever/Pain</option>
+             
+              <option value="Infection">Infection</option>
+
               <option value="Gestro-Instetinal-Tract">
                 Getro-Instatinal-Tract
               </option>
-              <option value="Derpression">Derpression</option>
-              <option value="Eyes-Nose-Ear">Eyes-Nose-Ear</option>
-              <option value="Fever-and-Pain">Fever and Pain</option>
-              <option value="Infection">Infection</option>
               <option value="Supplement">Supplement</option>
+              <option value="Depression">Depression</option>
+              <option value="Eyes-Nose-Ear">Eyes, Nose, Ear</option>
             </Field>
           </Form.Field>
           <Form.Field>
